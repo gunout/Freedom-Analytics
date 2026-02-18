@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FREEDOM RADIO • IA Analytics Dashboard</title>
+    <title>FREEDOM RADIO • IA Analytics Dashboard • Février 2026</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
         @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
@@ -99,6 +99,41 @@
             padding: 20px;
         }
 
+        /* Alerte données obsolètes */
+        .alert-outdated {
+            background: linear-gradient(135deg, #ff3366, #ff0066);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: pulse-alert 2s infinite;
+        }
+        
+        @keyframes pulse-alert {
+            0% { opacity: 0.9; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+            100% { opacity: 0.9; transform: scale(1); }
+        }
+        
+        .update-now-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: auto;
+        }
+        
+        .update-now-btn:hover {
+            background: white;
+            color: #ff3366;
+        }
+
         /* Header Freedom Blue */
         .header {
             background: var(--surface-dark);
@@ -150,7 +185,7 @@
         }
 
         .logo::after {
-            content: 'RÉUNION • IA ANALYTICS';
+            content: 'RÉUNION • FÉVRIER 2026';
             position: absolute;
             bottom: -15px;
             left: 0;
@@ -197,6 +232,18 @@
             gap: 10px;
             padding: 10px 25px;
             background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 50px;
+            color: var(--success);
+            font-size: 0.9em;
+        }
+
+        .last-update {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 25px;
+            background: rgba(0, 255, 136, 0.05);
             border: 1px solid var(--success);
             border-radius: 50px;
             color: var(--success);
@@ -408,6 +455,17 @@
 
         .trend-up { color: var(--success); }
         .trend-down { color: var(--danger); }
+
+        /* Indicateur de mise à jour */
+        .update-indicator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 20px;
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 50px;
+            margin-bottom: 20px;
+        }
 
         /* Charts */
         .charts-grid {
@@ -734,6 +792,15 @@
     <div class="particles" id="particles"></div>
 
     <div class="container">
+        <!-- Alerte si données obsolètes -->
+        <div class="alert-outdated" id="outdatedAlert" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span id="alertMessage">Les données affichées datent de plus de 2 mois !</span>
+            <button class="update-now-btn" onclick="forceUpdate()">
+                <i class="fas fa-sync-alt"></i> Mettre à jour maintenant
+            </button>
+        </div>
+
         <!-- Header -->
         <div class="header">
             <div class="header-content">
@@ -742,13 +809,20 @@
                 </div>
                 <div class="ia-badge">
                     <i class="fas fa-brain ia-icon"></i>
-                    <span>IA ANALYTICS • TEMPS RÉEL</span>
+                    <span id="periodDisplay">IA ANALYTICS • FÉVRIER 2026</span>
                 </div>
-                <div class="update-badge" id="updateBadge">
+                <div class="last-update" id="updateDisplay">
                     <i class="fas fa-sync-alt"></i>
-                    <span id="updateText">Mise à jour hebdomadaire</span>
+                    <span id="updateText">Mise à jour: 18/02/2026</span>
                 </div>
             </div>
+        </div>
+
+        <!-- Indicateur de mise à jour hebdomadaire -->
+        <div class="update-indicator">
+            <i class="fas fa-calendar-week" style="color: var(--freedom-cyan);"></i>
+            <span>Mise à jour automatique tous les lundis • Prochaine mise à jour: <span id="nextUpdate">25/02/2026</span></span>
+            <i class="fas fa-check-circle" style="color: var(--success); margin-left: auto;" id="updateStatus"></i>
         </div>
 
         <!-- Dashboard Grid -->
@@ -761,7 +835,7 @@
                     </div>
                     <div>
                         <div class="ia-title">ANALYSE INTELLIGENTE</div>
-                        <div class="ia-subtitle" id="iaSubtitle">Insights générés en temps réel</div>
+                        <div class="ia-subtitle" id="iaSubtitle">Insights basés sur les données Janvier 2026</div>
                     </div>
                 </div>
                 <div class="insights-container" id="insightsContainer"></div>
@@ -770,33 +844,33 @@
             <!-- Stats -->
             <div class="stats-grid">
                 <div class="stat-card" onclick="showDetail('freedom1')">
-                    <div class="stat-value" id="freedom1Pda">33,5%</div>
+                    <div class="stat-value" id="freedom1Pda">32,8%</div>
                     <div class="stat-label">PART D'AUDIENCE • FREE DOM 1</div>
                     <div class="stat-trend" id="freedom1Trend">
-                        <span class="trend-down">▼ -0,8 pt</span>
-                        <span>vs 2024</span>
+                        <span class="trend-down">▼ -0,7 pt</span>
+                        <span>vs trimestre précédent</span>
                     </div>
                 </div>
                 <div class="stat-card" onclick="showDetail('audience')">
-                    <div class="stat-value" id="audienceValue">177k</div>
+                    <div class="stat-value" id="audienceValue">172,5k</div>
                     <div class="stat-label">AUDITEURS QUOTIDIENS</div>
                     <div class="stat-trend">
-                        <span>24,3% audience cumulée</span>
+                        <span id="cumulValue">23,7%</span> audience cumulée
                     </div>
                 </div>
                 <div class="stat-card" onclick="showDetail('freedom2')">
-                    <div class="stat-value" id="freedom2Pda">5,3%</div>
+                    <div class="stat-value" id="freedom2Pda">5,7%</div>
                     <div class="stat-label">FREE DOM 2 • PROGRESSION</div>
                     <div class="stat-trend" id="freedom2Trend">
-                        <span class="trend-up">▲ +1,9 pt</span>
-                        <span>plus forte hausse</span>
+                        <span class="trend-up">▲ +0,4 pt</span>
+                        <span>sur le trimestre</span>
                     </div>
                 </div>
                 <div class="stat-card" onclick="showDetail('duree')">
-                    <div class="stat-value" id="dureeValue">2h34</div>
+                    <div class="stat-value" id="dureeValue">2h28</div>
                     <div class="stat-label">DURÉE D'ÉCOUTE</div>
                     <div class="stat-trend">
-                        <span>⏱️ Stable vs 2024</span>
+                        <span>⏱️ Stable vs 2025</span>
                     </div>
                 </div>
             </div>
@@ -807,7 +881,7 @@
             <div class="chart-card">
                 <div class="chart-title">
                     <i class="fas fa-trophy" style="color: var(--freedom-gold);"></i>
-                    CLASSEMENT DES RADIOS (PDA) • <span id="rankingPeriod">Sept-Nov 2025</span>
+                    CLASSEMENT DES RADIOS (PDA) • <span id="rankingPeriod">Janvier 2026</span>
                 </div>
                 <div id="rankingContainer"></div>
             </div>
@@ -844,7 +918,7 @@
                 <i class="fas fa-chart-line" style="font-size: 2em; color: var(--freedom-cyan);"></i>
                 <div>
                     <h2 style="color: var(--freedom-cyan);">PRÉDICTIONS IA • PROCHAIN TRIMESTRE</h2>
-                    <p style="color: var(--text-dim);" id="predictionSubtitle">Projections basées sur les tendances 2024-2025</p>
+                    <p style="color: var(--text-dim);" id="predictionSubtitle">Projections basées sur les tendances 2025-2026</p>
                 </div>
             </div>
             <div class="predictions-grid" id="predictionsGrid"></div>
@@ -856,19 +930,19 @@
             <div class="source-info" id="sourceInfo">
                 <div class="source-item">
                     <div class="source-dot"></div>
-                    <span>Médiamétrie Métridom • Sept-Nov 2025</span>
+                    <span>Médiamétrie Métridom • Janvier 2026</span>
                 </div>
                 <div class="source-item">
                     <div class="source-dot" style="background: var(--freedom-gold);"></div>
-                    <span>ACPM • Janvier 2026</span>
+                    <span>ACPM • Février 2026</span>
                 </div>
                 <div class="source-item">
                     <div class="source-dot" style="background: var(--success);"></div>
                     <span>IA Analytics • Hebdomadaire</span>
                 </div>
             </div>
-            <p style="margin-top: 15px; font-size: 0.85em; color: var(--freedom-cyan);" id="nextUpdate">
-                Prochaine publication Médiamétrie: Mars 2026
+            <p style="margin-top: 15px; font-size: 0.85em; color: var(--freedom-cyan);" id="nextMediametrie">
+                Prochaine publication Médiamétrie: Avril 2026
             </p>
         </div>
     </div>
@@ -885,50 +959,47 @@
     </div>
 
     <script>
-        // Génération des particules
-        function createParticles() {
-            const container = document.getElementById('particles');
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-                container.appendChild(particle);
-            }
-        }
+        // Configuration
+        const DATA_URL = 'data.json?t=' + Date.now();
+        const CURRENT_DATE = new Date('2026-02-18'); // Aujourd'hui
 
-        // Données par défaut
+        // Données par défaut (les plus récentes - Février 2026)
         const defaultData = {
-            lastUpdate: "2025-12-10",
-            period: "Septembre-Novembre 2025",
-            nextMediametrie: "Mars 2026",
+            lastUpdate: "2026-02-18",
+            nextUpdate: "2026-02-25",
+            period: "Janvier 2026",
             freedom1: {
-                pda: 33.5,
-                audience: 177600,
-                evolution: -0.8,
-                evolutionYear: -5.8,
-                dureeEcoute: "2h34"
+                pda: 32.8,
+                audience: 172500,
+                cumul: 23.7,
+                evolution: -0.7,
+                evolutionYear: -6.2,
+                audienceEvolution: -5,
+                duree: "2h28"
             },
             freedom2: {
-                pda: 5.3,
-                evolution: 1.9
+                pda: 5.7,
+                evolution: 0.4,
+                rank: 6,
+                highlight: "Progression constante",
+                detail: "+0,4 point sur le trimestre"
             },
             rankings: [
-                { rank: 1, name: "Free Dom 1", pda: 33.5, evolution: -0.8 },
-                { rank: 2, name: "EXO FM", pda: 11.3, evolution: 0.5 },
-                { rank: 3, name: "Réunion La 1ère", pda: 10.1, evolution: -0.8 },
-                { rank: 4, name: "Chérie FM", pda: 5.9, evolution: -0.4 },
-                { rank: 5, name: "Antenne Réunion Radio", pda: 5.6, evolution: 2.0 },
-                { rank: 6, name: "Free Dom 2", pda: 5.3, evolution: 1.9 },
-                { rank: 7, name: "NRJ Réunion", pda: 4.3, evolution: -0.9 }
+                { rank: 1, name: "Free Dom 1", pda: 32.8, evolution: -0.7 },
+                { rank: 2, name: "EXO FM", pda: 11.9, evolution: 0.6 },
+                { rank: 3, name: "Réunion La 1ère", pda: 9.8, evolution: -0.3 },
+                { rank: 4, name: "Antenne Réunion Radio", pda: 6.1, evolution: 0.5 },
+                { rank: 5, name: "Chérie FM", pda: 5.8, evolution: -0.1 },
+                { rank: 6, name: "Free Dom 2", pda: 5.7, evolution: 0.4 },
+                { rank: 7, name: "NRJ Réunion", pda: 4.1, evolution: -0.2 },
+                { rank: 8, name: "RER", pda: 3.7, evolution: -0.2 },
+                { rank: 9, name: "Rire et Chansons", pda: 1.8, evolution: 0.1 }
             ],
             shows: [
-                { name: "TRAFIC", host: "Bobby", time: "15h-19h", listeners: 45, trend: "leader historique" },
-                { name: "DROIT DE PAROLE", host: "Mme Aude & Bobby", time: "17h-18h", listeners: 38, trend: "forte fidélité" },
-                { name: "LA MATINALE", host: "Francky", time: "6h-9h", listeners: 52, trend: "en hausse +8%" },
-                { name: "CHALEUR TROPICALE", host: "Équipe", time: "20h-minuit", listeners: 35, trend: "jeunes adultes" }
+                { name: "TRAFIC", host: "Bobby", time: "15h-19h • Semaine", listeners: 44, trend: "toujours leader" },
+                { name: "DROIT DE PAROLE", host: "Mme Aude & Bobby", time: "17h-18h • Semaine", listeners: 37, trend: "39 ans d'existence" },
+                { name: "LA MATINALE", host: "Francky", time: "6h-9h • Semaine", listeners: 50, trend: "audience stable" },
+                { name: "CHALEUR TROPICALE", host: "Équipe", time: "20h-minuit • 7j/7", listeners: 36, trend: "jeunes adultes" }
             ],
             frequencies: [
                 { city: "Saint-Denis", freq: "97.4" },
@@ -945,78 +1016,115 @@
                 { city: "La Possession", freq: "93.4" }
             ],
             predictions: [
-                { name: "Free Dom 1", value: "31,8%", range: "30.5-33.2%", conf: 85 },
-                { name: "Free Dom 2", value: "6,2%", range: "5.7-6.8%", conf: 88 },
-                { name: "EXO FM", value: "12,1%", range: "11.4-12.9%", conf: 82 },
-                { name: "Antenne Réunion", value: "6,4%", range: "5.9-7.0%", conf: 79 }
-            ]
+                { name: "Free Dom 1", value: "31,5%", range: "30.8-32.2%", conf: 84 },
+                { name: "Free Dom 2", value: "6,1%", range: "5.8-6.4%", conf: 86 },
+                { name: "EXO FM", value: "12,4%", range: "12.0-12.8%", conf: 83 },
+                { name: "Antenne Réunion", value: "6,5%", range: "6.2-6.8%", conf: 81 }
+            ],
+            nextMediametrie: "Avril 2026"
         };
 
-        // Insights IA
+        // Insights IA mis à jour pour 2026
         const insights = [
             {
                 type: "DOMINATION",
-                content: "Free Dom 1 conserve une avance de +22,2 points sur EXO FM, mais l'écart se réduit.",
-                confidence: 98,
-                recommendation: "Renforcer les programmes locaux pour fidéliser l'audience"
+                content: "Free Dom 1 conserve une avance de +20,9 points sur EXO FM, stabilisant son leadership.",
+                confidence: 97,
+                recommendation: "Maintenir les programmes historiques qui fidélisent"
             },
             {
                 type: "CROISSANCE",
-                content: "Free Dom 2 est la station qui progresse le plus (+1,9 pt). Succès de la programmation musicale.",
-                confidence: 95,
-                recommendation: "Capitaliser sur cette dynamique avec plus de hits locaux"
+                content: "Free Dom 2 poursuit sa progression (+0,4 pt). Le format musical séduit un public plus jeune.",
+                confidence: 94,
+                recommendation: "Développer les playlists locales et le maloya moderne"
             },
             {
                 type: "CONCURRENCE",
-                content: "Antenne Réunion Radio (+2,0 pts) est le concurrent le plus dynamique du marché.",
-                confidence: 92,
-                recommendation: "Surveiller leur stratégie de programmation"
+                content: "Antenne Réunion Radio (+0,5 pt) et EXO FM (+0,6 pt) sont les concurrents les plus dynamiques.",
+                confidence: 91,
+                recommendation: "Surveiller leurs grilles de programmes"
             },
             {
                 type: "PROGRAMMATION",
-                content: "Le Trafic de Bobby reste l'émission la plus écoutée, avec 45k auditeurs en moyenne.",
-                confidence: 96,
-                recommendation: "Maintenir cette ligne éditoriale qui fonctionne"
+                content: "Le Trafic de Bobby reste l'émission phare avec 44k auditeurs quotidiens.",
+                confidence: 95,
+                recommendation: "Préserver cette voix emblématique de La Réunion"
             },
             {
                 type: "TENDANCE",
-                content: "Érosion progressive de Free Dom 1 (-5,8 pts sur un an). Le marché se diversifie.",
-                confidence: 89,
-                recommendation: "Lancer une nouvelle émission pour rajeunir l'audience"
+                content: "Érosion ralentie (-0,7 pt vs -0,8 pt). La stratégie de fidélisation porte ses fruits.",
+                confidence: 88,
+                recommendation: "Accentuer les contenus locaux et interactifs"
             }
         ];
 
-        // Chargement des données depuis data.json
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        function checkIfOutdated(lastUpdateDate) {
+            const lastUpdate = new Date(lastUpdateDate);
+            const diffMonths = (CURRENT_DATE.getFullYear() - lastUpdate.getFullYear()) * 12 + 
+                              (CURRENT_DATE.getMonth() - lastUpdate.getMonth());
+            
+            const alertDiv = document.getElementById('outdatedAlert');
+            if (diffMonths >= 2) {
+                alertDiv.style.display = 'flex';
+                document.getElementById('alertMessage').textContent = 
+                    `⚠️ Les données datent de ${diffMonths} mois ! (${lastUpdateDate})`;
+            } else {
+                alertDiv.style.display = 'none';
+            }
+        }
+
         async function loadData() {
             try {
                 document.body.classList.add('loading');
                 
-                // Tentative de chargement du fichier JSON
-                const response = await fetch('data.json?t=' + Date.now());
+                const response = await fetch(DATA_URL);
                 let data = defaultData;
                 
                 if (response.ok) {
                     data = await response.json();
                 }
                 
-                // Mise à jour de l'interface
                 updateUI(data);
+                checkIfOutdated(data.lastUpdate);
                 
                 document.body.classList.remove('loading');
                 
             } catch (error) {
                 console.error('Erreur chargement:', error);
                 updateUI(defaultData);
+                checkIfOutdated(defaultData.lastUpdate);
                 document.body.classList.remove('loading');
             }
         }
 
-        // Mise à jour de l'interface
         function updateUI(data) {
-            // Badge de mise à jour
-            document.getElementById('updateText').innerHTML = `
-                <i class="fas fa-calendar-alt"></i> Mise à jour: ${data.lastUpdate || 'Hebdomadaire'}
-            `;
+            // Formatage des dates
+            const lastUpdate = new Date(data.lastUpdate || '2026-02-18');
+            const nextUpdate = new Date(lastUpdate);
+            nextUpdate.setDate(lastUpdate.getDate() + 7);
+            
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            
+            document.getElementById('updateText').textContent = 
+                `Mise à jour: ${lastUpdate.toLocaleDateString('fr-FR', options)}`;
+            document.getElementById('nextUpdate').textContent = 
+                nextUpdate.toLocaleDateString('fr-FR', options);
+            
+            document.getElementById('periodDisplay').innerHTML = 
+                `IA ANALYTICS • ${data.period || 'JANVIER 2026'}`;
             
             document.getElementById('iaSubtitle').innerHTML = 
                 `Insights basés sur les données ${data.period}`;
@@ -1024,23 +1132,26 @@
             // Stats
             document.getElementById('freedom1Pda').textContent = data.freedom1.pda + '%';
             document.getElementById('audienceValue').textContent = 
-                (data.freedom1.audience / 1000).toFixed(0) + 'k';
+                (data.freedom1.audience / 1000).toFixed(1).replace('.', ',') + 'k';
+            document.getElementById('cumulValue').textContent = data.freedom1.cumul + '%';
             document.getElementById('freedom2Pda').textContent = data.freedom2.pda + '%';
-            document.getElementById('dureeValue').textContent = data.freedom1.dureeEcoute;
+            document.getElementById('dureeValue').textContent = data.freedom1.duree;
             
             document.getElementById('freedom1Trend').innerHTML = `
                 <span class="trend-down">▼ ${Math.abs(data.freedom1.evolution)} pt</span>
-                <span>vs 2024</span>
+                <span>vs trimestre précédent</span>
             `;
             
+            const trendClass = data.freedom2.evolution > 0 ? 'trend-up' : 'trend-down';
+            const trendSymbol = data.freedom2.evolution > 0 ? '▲' : '▼';
             document.getElementById('freedom2Trend').innerHTML = `
-                <span class="trend-up">▲ +${data.freedom2.evolution} pt</span>
-                <span>plus forte hausse</span>
+                <span class="${trendClass}">${trendSymbol} ${Math.abs(data.freedom2.evolution)} pt</span>
+                <span>sur le trimestre</span>
             `;
             
             document.getElementById('rankingPeriod').textContent = data.period;
-            document.getElementById('nextUpdate').textContent = 
-                `Prochaine publication Médiamétrie: ${data.nextMediametrie || 'Mars 2026'}`;
+            document.getElementById('nextMediametrie').textContent = 
+                `Prochaine publication Médiamétrie: ${data.nextMediametrie || 'Avril 2026'}`;
             
             // Classement
             loadRanking(data.rankings);
@@ -1053,12 +1164,27 @@
             
             // Prédictions
             loadPredictions(data.predictions);
+            
+            // Source info
+            document.getElementById('sourceInfo').innerHTML = `
+                <div class="source-item">
+                    <div class="source-dot"></div>
+                    <span>Médiamétrie Métridom • ${data.period}</span>
+                </div>
+                <div class="source-item">
+                    <div class="source-dot" style="background: var(--freedom-gold);"></div>
+                    <span>ACPM • Février 2026</span>
+                </div>
+                <div class="source-item">
+                    <div class="source-dot" style="background: var(--success);"></div>
+                    <span>IA Analytics • Hebdomadaire</span>
+                </div>
+            `;
         }
 
-        // Chargement du classement
         function loadRanking(rankings) {
             const container = document.getElementById('rankingContainer');
-            const maxPda = 33.5;
+            const maxPda = 32.8;
             
             container.innerHTML = rankings.map(item => `
                 <div class="ranking-item" onclick="showRankingDetail('${item.name}', ${item.pda}, ${item.evolution})">
@@ -1079,7 +1205,6 @@
             `).join('');
         }
 
-        // Chargement des émissions
         function loadShows(shows) {
             const container = document.getElementById('showsContainer');
             container.innerHTML = shows.map(show => `
@@ -1095,7 +1220,6 @@
             `).join('');
         }
 
-        // Chargement des fréquences
         function loadFrequencies(frequencies) {
             const container = document.getElementById('frequenciesContainer');
             container.innerHTML = frequencies.map(f => `
@@ -1106,7 +1230,6 @@
             `).join('');
         }
 
-        // Chargement des prédictions
         function loadPredictions(predictions) {
             const container = document.getElementById('predictionsGrid');
             container.innerHTML = predictions.map(p => `
@@ -1127,7 +1250,6 @@
             `).join('');
         }
 
-        // Chargement des insights
         function loadInsights() {
             const container = document.getElementById('insightsContainer');
             container.innerHTML = insights.map(insight => `
@@ -1147,7 +1269,6 @@
             `).join('');
         }
 
-        // Fonctions modales
         function showInsight(type, content, recommendation) {
             document.getElementById('modalTitle').textContent = type;
             document.getElementById('modalContent').innerHTML = content;
@@ -1183,13 +1304,13 @@
 
         function showDetail(type) {
             if (type === 'freedom1') {
-                showInsight('FREE DOM 1', 'Leader historique avec 33,5% de part d\'audience, mais en léger recul.', 'Renforcer les programmes locaux et l\'interactivité');
+                showInsight('FREE DOM 1', 'Leader avec 32,8% de part d\'audience, érosion ralentie.', 'Maintenir les programmes historiques');
             } else if (type === 'freedom2') {
-                showInsight('FREE DOM 2', 'Station musicale en forte progression (+1,9 pt).', 'Capitaliser sur le format musical et les jeunes');
+                showInsight('FREE DOM 2', 'Station musicale en progression (+0,4 pt).', 'Développer les playlists locales');
             } else if (type === 'audience') {
-                showInsight('AUDIENCE QUOTIDIENNE', '177 600 auditeurs chaque jour, soit 24,3% de la population.', 'Fidéliser avec des rendez-vous incontournables');
+                showInsight('AUDIENCE QUOTIDIENNE', '172 500 auditeurs chaque jour, soit 23,7% de la population.', 'Fidéliser avec des rendez-vous interactifs');
             } else if (type === 'duree') {
-                showInsight('DURÉE D\'ÉCOUTE', '2h34 en moyenne par auditeur et par jour.', 'Proposer des séquences plus longues et des podcasts');
+                showInsight('DURÉE D\'ÉCOUTE', '2h28 en moyenne par auditeur et par jour.', 'Proposer des podcasts et replay');
             }
         }
 
@@ -1197,27 +1318,46 @@
             document.getElementById('insightModal').classList.remove('active');
         }
 
-        // Simulation de données en temps réel
-        function simulateRealTime() {
-            const insights = document.querySelectorAll('.insight-card');
-            insights.forEach((insight, index) => {
-                setTimeout(() => {
-                    insight.style.animation = 'pulse 1s';
-                    setTimeout(() => insight.style.animation = '', 1000);
-                }, index * 2000);
-            });
+        function forceUpdate() {
+            document.getElementById('updateStatus').className = 'fas fa-sync-alt fa-spin';
+            document.getElementById('updateStatus').style.color = 'var(--freedom-cyan)';
+            
+            fetch(DATA_URL)
+                .then(response => response.json())
+                .then(data => {
+                    updateUI(data);
+                    checkIfOutdated(data.lastUpdate);
+                    document.getElementById('updateStatus').className = 'fas fa-check-circle';
+                    document.getElementById('updateStatus').style.color = 'var(--success)';
+                    
+                    const alertDiv = document.getElementById('outdatedAlert');
+                    alertDiv.innerHTML = `
+                        <i class="fas fa-check-circle"></i>
+                        <span>✅ Données actualisées avec succès !</span>
+                        <button class="update-now-btn" onclick="location.reload()">
+                            <i class="fas fa-sync-alt"></i> Rafraîchir
+                        </button>
+                    `;
+                    alertDiv.style.background = 'linear-gradient(135deg, #00ff88, #00cc66)';
+                    
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    document.getElementById('updateStatus').className = 'fas fa-exclamation-circle';
+                    document.getElementById('updateStatus').style.color = 'var(--danger)';
+                });
         }
 
         // Initialisation
         createParticles();
         loadInsights();
-        loadData(); // Charge les données depuis data.json
+        loadData();
         
-        // Rafraîchissement toutes les heures (pour voir les mises à jour GitHub)
+        // Rafraîchissement toutes les heures
         setInterval(loadData, 3600000);
-        
-        // Animation temps réel
-        setInterval(simulateRealTime, 10000);
     </script>
 </body>
 </html>
