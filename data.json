@@ -1,0 +1,35 @@
+{
+  "lastUpdate": "2025-12-10",
+  "period": "Septembre-Novembre 2025",
+  "nextUpdate": "Mars 2026",
+  "freedom1": {
+    "pda": 33.5,
+    "audience": 177600,
+    "evolution": -0.8,
+    "evolutionYear": -5.8,
+    "dureeEcoute": "3h00"
+  },
+  "freedom2": {
+    "pda": 5.3,
+    "evolution": 1.9
+  },
+  "rankings": [
+    {"rank": 1, "name": "Free Dom 1", "pda": 33.5, "evolution": -0.8},
+    {"rank": 2, "name": "EXO FM", "pda": 11.3, "evolution": 0.5},
+    {"rank": 3, "name": "Réunion La 1ère", "pda": 10.1, "evolution": -0.8},
+    {"rank": 4, "name": "Chérie FM", "pda": 5.9, "evolution": -0.4},
+    {"rank": 5, "name": "Antenne Réunion Radio", "pda": 5.6, "evolution": 2.0},
+    {"rank": 6, "name": "Free Dom 2", "pda": 5.3, "evolution": 1.9},
+    {"rank": 7, "name": "NRJ Réunion", "pda": 4.3, "evolution": -0.9}
+  ],
+  "shows": [
+    {"name": "TRAFIC", "host": "Bobby", "time": "15h-19h", "listeners": 45},
+    {"name": "DROIT DE PAROLE", "host": "Mme Aude & Bobby", "time": "17h-18h", "listeners": 38},
+    {"name": "LA MATINALE", "host": "Francky", "time": "6h-9h", "listeners": 52},
+    {"name": "CHALEUR TROPICALE", "host": "Équipe", "time": "20h-minuit", "listeners": 35}
+  ],
+  "sources": [
+    {"name": "Médiamétrie Métridom", "period": "Sept-Nov 2025", "next": "Mars 2026"},
+    {"name": "ACPM", "period": "Déc 2025", "next": "Jan 2026"}
+  ]
+}
