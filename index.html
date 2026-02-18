@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FREEDOM RADIO • IA Analytics Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+        
+        :root {
+            --freedom-blue: #0033A0;
+            --freedom-light-blue: #0066CC;
+            --freedom-sky: #00A0DF;
+            --freedom-cyan: #00D4FF;
+            --freedom-navy: #001F5F;
+            --freedom-gold: #FFD700;
+            --accent: #00ffff;
+            --background: #0a0a0f;
+            --surface: rgba(0, 51, 160, 0.2);
+            --surface-light: rgba(0, 102, 204, 0.15);
+            --surface-dark: rgba(0, 31, 95, 0.3);
+            --text: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.7);
+            --success: #00ff88;
+            --warning: #ffbb00;
+            --danger: #ff3366;
+            --info: #00D4FF;
+            --gradient-freedom: linear-gradient(135deg, #0033A0, #0066CC, #00A0DF, #00D4FF);
+            --gradient-blue: linear-gradient(135deg, #0033A0, #0066CC);
+            --gradient-cyan: linear-gradient(135deg, #00A0DF, #00D4FF);
+            --gradient-gold: linear-gradient(135deg, #FFD700, #FFAA00);
+            --glass-effect: rgba(0, 212, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--glass-effect) 1px, transparent 1px),
+                linear-gradient(90deg, var(--glass-effect) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--freedom-cyan);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) translateX(-10vw);
+            }
+            to {
+                transform: translateY(-100vh) translateX(10vw);
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Freedom Blue */
+        .header {
+            background: var(--surface-dark);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--freedom-cyan);
+            border-radius: 30px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 212, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: var(--gradient-freedom);
+            opacity: 0.1;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: var(--gradient-freedom);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .logo::after {
+            content: 'RÉUNION • IA ANALYTICS';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            font-size: 0.3em;
+            font-weight: 400;
+            background: var(--gradient-cyan);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 3px;
+        }
+
+        .ia-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 30px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--freedom-cyan);
+            border-radius: 50px;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+            animation: glow 3s infinite;
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+            50% { box-shadow: 0 0 50px rgba(0, 212, 255, 0.6); }
+            100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+        }
+
+        .ia-icon {
+            font-size: 1.8em;
+            color: var(--freedom-cyan);
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .update-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 25px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 50px;
+            color: var(--success);
+            font-size: 0.9em;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* IA Insights Panel */
+        .ia-panel {
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--freedom-cyan);
+            border-radius: 25px;
+            padding: 25px;
+        }
+
+        .ia-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .ia-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-freedom);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.7); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(0, 212, 255, 0.5); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 212, 255, 0); }
+        }
+
+        .ia-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            background: var(--gradient-freedom);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .ia-subtitle {
+            color: var(--text-dim);
+            font-size: 0.9em;
+        }
+
+        .insights-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .insights-container::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .insights-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .insights-container::-webkit-scrollbar-thumb {
+            background: var(--freedom-cyan);
+            border-radius: 10px;
+        }
+
+        .insight-card {
+            background: rgba(0, 51, 160, 0.2);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 15px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .insight-card:hover {
+            border-color: var(--freedom-cyan);
+            transform: translateX(5px);
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.2);
+        }
+
+        .insight-type {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--gradient-freedom);
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .insight-content {
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .insight-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-dim);
+            font-size: 0.85em;
+        }
+
+        .confidence-bar {
+            width: 80px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: var(--gradient-freedom);
+            border-radius: 2px;
+            transition: width 1s ease;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 25px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            border-color: var(--freedom-cyan);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .stat-value {
+            font-size: 3em;
+            font-weight: 700;
+            background: var(--gradient-freedom);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .trend-up { color: var(--success); }
+        .trend-down { color: var(--danger); }
+
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .chart-card {
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 25px;
+            padding: 25px;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--freedom-cyan);
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ranking-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .ranking-position {
+            width: 35px;
+            height: 35px;
+            background: var(--gradient-freedom);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .ranking-info {
+            flex: 1;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            margin-top: 5px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient-freedom);
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        /* Shows Grid */
+        .shows-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .show-card {
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .show-card:hover {
+            border-color: var(--freedom-cyan);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .show-name {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--freedom-cyan);
+            margin-bottom: 5px;
+        }
+
+        .show-host {
+            color: var(--text-dim);
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .show-time {
+            display: inline-block;
+            padding: 3px 12px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+
+        /* Predictions Panel */
+        .predictions-panel {
+            background: var(--surface-dark);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--freedom-cyan);
+            border-radius: 25px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .predictions-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .predictions-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .predictions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .prediction-card {
+            background: rgba(0, 51, 160, 0.2);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .prediction-card:hover {
+            border-color: var(--freedom-cyan);
+            transform: translateY(-3px);
+        }
+
+        .prediction-value {
+            font-size: 2em;
+            font-weight: 700;
+            background: var(--gradient-freedom);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 10px 0;
+        }
+
+        /* Frequencies */
+        .frequencies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .frequency-card {
+            background: rgba(0, 51, 160, 0.2);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .frequency-card:hover {
+            border-color: var(--freedom-cyan);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .frequency-city {
+            font-weight: 600;
+        }
+
+        .frequency-value {
+            background: var(--gradient-freedom);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface-dark);
+            border: 2px solid var(--freedom-cyan);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            animation: modalIn 0.5s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-size: 1.8em;
+            font-weight: 600;
+            background: var(--gradient-freedom);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 50px;
+            padding: 30px;
+            text-align: center;
+            color: var(--text-dim);
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .source-info {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 51, 160, 0.2);
+            border-radius: 10px;
+            font-size: 0.9em;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .source-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .source-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--freedom-cyan);
+            box-shadow: 0 0 10px var(--freedom-cyan);
+        }
+
+        .loading {
+            position: relative;
+            min-height: 200px;
+        }
+
+        .loading::after {
+            content: '⏳ Chargement des données...';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--text-dim);
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">
+                    FREEDOM RADIO
+                </div>
+                <div class="ia-badge">
+                    <i class="fas fa-brain ia-icon"></i>
+                    <span>IA ANALYTICS • TEMPS RÉEL</span>
+                </div>
+                <div class="update-badge" id="updateBadge">
+                    <i class="fas fa-sync-alt"></i>
+                    <span id="updateText">Mise à jour hebdomadaire</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- IA Insights Panel -->
+            <div class="ia-panel">
+                <div class="ia-header">
+                    <div class="ia-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div>
+                        <div class="ia-title">ANALYSE INTELLIGENTE</div>
+                        <div class="ia-subtitle" id="iaSubtitle">Insights générés en temps réel</div>
+                    </div>
+                </div>
+                <div class="insights-container" id="insightsContainer"></div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card" onclick="showDetail('freedom1')">
+                    <div class="stat-value" id="freedom1Pda">33,5%</div>
+                    <div class="stat-label">PART D'AUDIENCE • FREE DOM 1</div>
+                    <div class="stat-trend" id="freedom1Trend">
+                        <span class="trend-down">▼ -0,8 pt</span>
+                        <span>vs 2024</span>
+                    </div>
+                </div>
+                <div class="stat-card" onclick="showDetail('audience')">
+                    <div class="stat-value" id="audienceValue">177k</div>
+                    <div class="stat-label">AUDITEURS QUOTIDIENS</div>
+                    <div class="stat-trend">
+                        <span>24,3% audience cumulée</span>
+                    </div>
+                </div>
+                <div class="stat-card" onclick="showDetail('freedom2')">
+                    <div class="stat-value" id="freedom2Pda">5,3%</div>
+                    <div class="stat-label">FREE DOM 2 • PROGRESSION</div>
+                    <div class="stat-trend" id="freedom2Trend">
+                        <span class="trend-up">▲ +1,9 pt</span>
+                        <span>plus forte hausse</span>
+                    </div>
+                </div>
+                <div class="stat-card" onclick="showDetail('duree')">
+                    <div class="stat-value" id="dureeValue">2h34</div>
+                    <div class="stat-label">DURÉE D'ÉCOUTE</div>
+                    <div class="stat-trend">
+                        <span>⏱️ Stable vs 2024</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-trophy" style="color: var(--freedom-gold);"></i>
+                    CLASSEMENT DES RADIOS (PDA) • <span id="rankingPeriod">Sept-Nov 2025</span>
+                </div>
+                <div id="rankingContainer"></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-chart-line" style="color: var(--freedom-cyan);"></i>
+                    PRÉDICTIONS CROISSANCE • PROCHAIN TRIMESTRE
+                </div>
+                <div id="predictionContainer"></div>
+            </div>
+        </div>
+
+        <!-- Shows -->
+        <div class="chart-card">
+            <div class="chart-title">
+                <i class="fas fa-microphone-alt" style="color: var(--freedom-gold);"></i>
+                ÉMISSIONS PHARES • ANALYSES IA
+            </div>
+            <div class="shows-grid" id="showsContainer"></div>
+        </div>
+
+        <!-- Frequencies -->
+        <div class="chart-card">
+            <div class="chart-title">
+                <i class="fas fa-broadcast-tower" style="color: var(--freedom-cyan);"></i>
+                FRÉQUENCES FM • ÎLE DE LA RÉUNION
+            </div>
+            <div class="frequencies-grid" id="frequenciesContainer"></div>
+        </div>
+
+        <!-- Predictions -->
+        <div class="predictions-panel">
+            <div class="predictions-header">
+                <i class="fas fa-chart-line" style="font-size: 2em; color: var(--freedom-cyan);"></i>
+                <div>
+                    <h2 style="color: var(--freedom-cyan);">PRÉDICTIONS IA • PROCHAIN TRIMESTRE</h2>
+                    <p style="color: var(--text-dim);" id="predictionSubtitle">Projections basées sur les tendances 2024-2025</p>
+                </div>
+            </div>
+            <div class="predictions-grid" id="predictionsGrid"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>FREEDOM RADIO • 1ÈRE RADIO DE LA RÉUNION DEPUIS 1981</p>
+            <div class="source-info" id="sourceInfo">
+                <div class="source-item">
+                    <div class="source-dot"></div>
+                    <span>Médiamétrie Métridom • Sept-Nov 2025</span>
+                </div>
+                <div class="source-item">
+                    <div class="source-dot" style="background: var(--freedom-gold);"></div>
+                    <span>ACPM • Janvier 2026</span>
+                </div>
+                <div class="source-item">
+                    <div class="source-dot" style="background: var(--success);"></div>
+                    <span>IA Analytics • Hebdomadaire</span>
+                </div>
+            </div>
+            <p style="margin-top: 15px; font-size: 0.85em; color: var(--freedom-cyan);" id="nextUpdate">
+                Prochaine publication Médiamétrie: Mars 2026
+            </p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="insightModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <div id="modalContent" style="line-height: 1.6; margin-bottom: 20px; color: var(--text);"></div>
+            <div id="modalRecommendation" style="background: rgba(0,212,255,0.1); padding: 15px; border-radius: 10px; margin-top: 20px;"></div>
+            <button onclick="closeModal()" style="margin-top: 25px; padding: 12px 30px; background: var(--gradient-freedom); border: none; border-radius: 30px; color: white; cursor: pointer; font-weight: 600; width: 100%;">Fermer</button>
+        </div>
+    </div>
+
+    <script>
+        // Génération des particules
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Données par défaut
+        const defaultData = {
+            lastUpdate: "2025-12-10",
+            period: "Septembre-Novembre 2025",
+            nextMediametrie: "Mars 2026",
+            freedom1: {
+                pda: 33.5,
+                audience: 177600,
+                evolution: -0.8,
+                evolutionYear: -5.8,
+                dureeEcoute: "2h34"
+            },
+            freedom2: {
+                pda: 5.3,
+                evolution: 1.9
+            },
+            rankings: [
+                { rank: 1, name: "Free Dom 1", pda: 33.5, evolution: -0.8 },
+                { rank: 2, name: "EXO FM", pda: 11.3, evolution: 0.5 },
+                { rank: 3, name: "Réunion La 1ère", pda: 10.1, evolution: -0.8 },
+                { rank: 4, name: "Chérie FM", pda: 5.9, evolution: -0.4 },
+                { rank: 5, name: "Antenne Réunion Radio", pda: 5.6, evolution: 2.0 },
+                { rank: 6, name: "Free Dom 2", pda: 5.3, evolution: 1.9 },
+                { rank: 7, name: "NRJ Réunion", pda: 4.3, evolution: -0.9 }
+            ],
+            shows: [
+                { name: "TRAFIC", host: "Bobby", time: "15h-19h", listeners: 45, trend: "leader historique" },
+                { name: "DROIT DE PAROLE", host: "Mme Aude & Bobby", time: "17h-18h", listeners: 38, trend: "forte fidélité" },
+                { name: "LA MATINALE", host: "Francky", time: "6h-9h", listeners: 52, trend: "en hausse +8%" },
+                { name: "CHALEUR TROPICALE", host: "Équipe", time: "20h-minuit", listeners: 35, trend: "jeunes adultes" }
+            ],
+            frequencies: [
+                { city: "Saint-Denis", freq: "97.4" },
+                { city: "Saint-Pierre", freq: "97.4" },
+                { city: "Saint-Paul", freq: "95.0" },
+                { city: "Saint-André", freq: "106.2" },
+                { city: "Saint-Benoît", freq: "101.3" },
+                { city: "Saint-Joseph", freq: "106.1" },
+                { city: "Cilaos", freq: "98.8" },
+                { city: "Le Port", freq: "93.4" },
+                { city: "Saint-Gilles", freq: "107.1" },
+                { city: "Saint-Leu", freq: "95.0" },
+                { city: "Sainte-Suzanne", freq: "103.8" },
+                { city: "La Possession", freq: "93.4" }
+            ],
+            predictions: [
+                { name: "Free Dom 1", value: "31,8%", range: "30.5-33.2%", conf: 85 },
+                { name: "Free Dom 2", value: "6,2%", range: "5.7-6.8%", conf: 88 },
+                { name: "EXO FM", value: "12,1%", range: "11.4-12.9%", conf: 82 },
+                { name: "Antenne Réunion", value: "6,4%", range: "5.9-7.0%", conf: 79 }
+            ]
+        };
+
+        // Insights IA
+        const insights = [
+            {
+                type: "DOMINATION",
+                content: "Free Dom 1 conserve une avance de +22,2 points sur EXO FM, mais l'écart se réduit.",
+                confidence: 98,
+                recommendation: "Renforcer les programmes locaux pour fidéliser l'audience"
+            },
+            {
+                type: "CROISSANCE",
+                content: "Free Dom 2 est la station qui progresse le plus (+1,9 pt). Succès de la programmation musicale.",
+                confidence: 95,
+                recommendation: "Capitaliser sur cette dynamique avec plus de hits locaux"
+            },
+            {
+                type: "CONCURRENCE",
+                content: "Antenne Réunion Radio (+2,0 pts) est le concurrent le plus dynamique du marché.",
+                confidence: 92,
+                recommendation: "Surveiller leur stratégie de programmation"
+            },
+            {
+                type: "PROGRAMMATION",
+                content: "Le Trafic de Bobby reste l'émission la plus écoutée, avec 45k auditeurs en moyenne.",
+                confidence: 96,
+                recommendation: "Maintenir cette ligne éditoriale qui fonctionne"
+            },
+            {
+                type: "TENDANCE",
+                content: "Érosion progressive de Free Dom 1 (-5,8 pts sur un an). Le marché se diversifie.",
+                confidence: 89,
+                recommendation: "Lancer une nouvelle émission pour rajeunir l'audience"
+            }
+        ];
+
+        // Chargement des données depuis data.json
+        async function loadData() {
+            try {
+                document.body.classList.add('loading');
+                
+                // Tentative de chargement du fichier JSON
+                const response = await fetch('data.json?t=' + Date.now());
+                let data = defaultData;
+                
+                if (response.ok) {
+                    data = await response.json();
+                }
+                
+                // Mise à jour de l'interface
+                updateUI(data);
+                
+                document.body.classList.remove('loading');
+                
+            } catch (error) {
+                console.error('Erreur chargement:', error);
+                updateUI(defaultData);
+                document.body.classList.remove('loading');
+            }
+        }
+
+        // Mise à jour de l'interface
+        function updateUI(data) {
+            // Badge de mise à jour
+            document.getElementById('updateText').innerHTML = `
+                <i class="fas fa-calendar-alt"></i> Mise à jour: ${data.lastUpdate || 'Hebdomadaire'}
+            `;
+            
+            document.getElementById('iaSubtitle').innerHTML = 
+                `Insights basés sur les données ${data.period}`;
+            
+            // Stats
+            document.getElementById('freedom1Pda').textContent = data.freedom1.pda + '%';
+            document.getElementById('audienceValue').textContent = 
+                (data.freedom1.audience / 1000).toFixed(0) + 'k';
+            document.getElementById('freedom2Pda').textContent = data.freedom2.pda + '%';
+            document.getElementById('dureeValue').textContent = data.freedom1.dureeEcoute;
+            
+            document.getElementById('freedom1Trend').innerHTML = `
+                <span class="trend-down">▼ ${Math.abs(data.freedom1.evolution)} pt</span>
+                <span>vs 2024</span>
+            `;
+            
+            document.getElementById('freedom2Trend').innerHTML = `
+                <span class="trend-up">▲ +${data.freedom2.evolution} pt</span>
+                <span>plus forte hausse</span>
+            `;
+            
+            document.getElementById('rankingPeriod').textContent = data.period;
+            document.getElementById('nextUpdate').textContent = 
+                `Prochaine publication Médiamétrie: ${data.nextMediametrie || 'Mars 2026'}`;
+            
+            // Classement
+            loadRanking(data.rankings);
+            
+            // Émissions
+            loadShows(data.shows);
+            
+            // Fréquences
+            loadFrequencies(data.frequencies);
+            
+            // Prédictions
+            loadPredictions(data.predictions);
+        }
+
+        // Chargement du classement
+        function loadRanking(rankings) {
+            const container = document.getElementById('rankingContainer');
+            const maxPda = 33.5;
+            
+            container.innerHTML = rankings.map(item => `
+                <div class="ranking-item" onclick="showRankingDetail('${item.name}', ${item.pda}, ${item.evolution})">
+                    <div class="ranking-position">${item.rank}</div>
+                    <div class="ranking-info">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-weight: 600;">${item.name}</span>
+                            <span style="color: var(--freedom-cyan);">${item.pda}%</span>
+                        </div>
+                        <div style="color: ${item.evolution > 0 ? 'var(--success)' : 'var(--danger)'}; font-size: 0.85em;">
+                            ${item.evolution > 0 ? '▲' : '▼'} ${Math.abs(item.evolution)} pt
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: ${(item.pda / maxPda) * 100}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Chargement des émissions
+        function loadShows(shows) {
+            const container = document.getElementById('showsContainer');
+            container.innerHTML = shows.map(show => `
+                <div class="show-card" onclick="showShowDetail('${show.name}', '${show.host}', ${show.listeners}, '${show.trend}')">
+                    <div class="show-name">${show.name}</div>
+                    <div class="show-host">${show.host}</div>
+                    <div class="show-time">${show.time}</div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                        <span>📊 Audience: ${show.listeners}k</span>
+                        <span style="color: var(--freedom-cyan);">${show.trend}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Chargement des fréquences
+        function loadFrequencies(frequencies) {
+            const container = document.getElementById('frequenciesContainer');
+            container.innerHTML = frequencies.map(f => `
+                <div class="frequency-card">
+                    <span class="frequency-city">${f.city}</span>
+                    <span class="frequency-value">${f.freq}</span>
+                </div>
+            `).join('');
+        }
+
+        // Chargement des prédictions
+        function loadPredictions(predictions) {
+            const container = document.getElementById('predictionsGrid');
+            container.innerHTML = predictions.map(p => `
+                <div class="prediction-card">
+                    <div style="color: var(--text-dim);">${p.name}</div>
+                    <div class="prediction-value">${p.value}</div>
+                    <div style="color: var(--text-dim); font-size: 0.85em;">Intervalle: ${p.range}</div>
+                    <div style="margin-top: 10px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85em;">
+                            <span>Confiance</span>
+                            <span>${p.conf}%</span>
+                        </div>
+                        <div class="confidence-bar" style="width: 100%;">
+                            <div class="confidence-fill" style="width: ${p.conf}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Chargement des insights
+        function loadInsights() {
+            const container = document.getElementById('insightsContainer');
+            container.innerHTML = insights.map(insight => `
+                <div class="insight-card" onclick="showInsight('${insight.type}', '${insight.content}', '${insight.recommendation}')">
+                    <div class="insight-type">${insight.type}</div>
+                    <div class="insight-content">${insight.content}</div>
+                    <div class="insight-meta">
+                        <span>Confiance IA</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span>${insight.confidence}%</span>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" style="width: ${insight.confidence}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Fonctions modales
+        function showInsight(type, content, recommendation) {
+            document.getElementById('modalTitle').textContent = type;
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('modalRecommendation').innerHTML = `<strong>💡 Recommandation IA :</strong> ${recommendation}`;
+            document.getElementById('insightModal').classList.add('active');
+        }
+
+        function showRankingDetail(name, pda, evolution) {
+            document.getElementById('modalTitle').textContent = name;
+            document.getElementById('modalContent').innerHTML = `
+                <strong>Part d'audience:</strong> ${pda}%<br>
+                <strong>Évolution:</strong> ${evolution > 0 ? '+' : ''}${evolution} pt<br>
+                <strong>Position:</strong> ${defaultData.rankings.find(r => r.name === name).rank}e
+            `;
+            document.getElementById('modalRecommendation').innerHTML = evolution > 0 
+                ? "📈 Tendance positive à consolider" 
+                : "📉 Inverser la tendance avec des actions marketing";
+            document.getElementById('insightModal').classList.add('active');
+        }
+
+        function showShowDetail(name, host, listeners, trend) {
+            document.getElementById('modalTitle').textContent = name;
+            document.getElementById('modalContent').innerHTML = `
+                <strong>Animateur:</strong> ${host}<br>
+                <strong>Audience:</strong> ${listeners}k auditeurs<br>
+                <strong>Tendance:</strong> ${trend}
+            `;
+            document.getElementById('modalRecommendation').innerHTML = listeners > 40 
+                ? "⭐ Émission phare à préserver" 
+                : "📊 Potentiel de développement à exploiter";
+            document.getElementById('insightModal').classList.add('active');
+        }
+
+        function showDetail(type) {
+            if (type === 'freedom1') {
+                showInsight('FREE DOM 1', 'Leader historique avec 33,5% de part d\'audience, mais en léger recul.', 'Renforcer les programmes locaux et l\'interactivité');
+            } else if (type === 'freedom2') {
+                showInsight('FREE DOM 2', 'Station musicale en forte progression (+1,9 pt).', 'Capitaliser sur le format musical et les jeunes');
+            } else if (type === 'audience') {
+                showInsight('AUDIENCE QUOTIDIENNE', '177 600 auditeurs chaque jour, soit 24,3% de la population.', 'Fidéliser avec des rendez-vous incontournables');
+            } else if (type === 'duree') {
+                showInsight('DURÉE D\'ÉCOUTE', '2h34 en moyenne par auditeur et par jour.', 'Proposer des séquences plus longues et des podcasts');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('insightModal').classList.remove('active');
+        }
+
+        // Simulation de données en temps réel
+        function simulateRealTime() {
+            const insights = document.querySelectorAll('.insight-card');
+            insights.forEach((insight, index) => {
+                setTimeout(() => {
+                    insight.style.animation = 'pulse 1s';
+                    setTimeout(() => insight.style.animation = '', 1000);
+                }, index * 2000);
+            });
+        }
+
+        // Initialisation
+        createParticles();
+        loadInsights();
+        loadData(); // Charge les données depuis data.json
+        
+        // Rafraîchissement toutes les heures (pour voir les mises à jour GitHub)
+        setInterval(loadData, 3600000);
+        
+        // Animation temps réel
+        setInterval(simulateRealTime, 10000);
+    </script>
+</body>
+</html>
